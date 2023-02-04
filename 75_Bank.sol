@@ -5,4 +5,9 @@ contract Bank{
     mapping(address => uint256) public balances;
     mapping (address => bool) public isStaked;
 
-}
+    function deposit() public payable {
+        balances[msg.sender] += msg.value;
+    }
+
+    
+ }
