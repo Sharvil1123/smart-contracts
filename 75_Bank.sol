@@ -14,4 +14,9 @@ contract Bank{
         balances[msg.sender] -= amount;
         msg.sender.transfer(amount);
     }
+
+    function stake() public {
+        require(!isStaked[msg.sender], "Already Staked");
+        isStaked[msg.sender] = true;
+    }
 }
