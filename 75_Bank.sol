@@ -9,5 +9,9 @@ contract Bank{
         balances[msg.sender] += msg.value;
     }
 
-    
- }
+    function withdraw(uint256 amount) public {
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+        balances[msg.sender] -= amount;
+        msg.sender.transfer(amount);
+    }
+}
