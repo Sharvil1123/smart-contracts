@@ -1,18 +1,23 @@
 //SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
-contract Bank{
-    mapping(address  => uint256) public  balances;
-    mapping (address => bool) public isStaked;
+contract Bank {
+    mapping(address => uint256) public balances;
+    mapping(address => bool) public isStaked;
 
     function deposit() public payable {
         balances[msg.sender] += msg.value;
     }
 
-    function withdraw(uint256 amount) public {
+    function withdraw(uint256 amount) public payable {
         require(balances[msg.sender] >= amount, "Insufficient balance");
+        uint256 originalBalance = balances[msg.sender];
         balances[msg.sender] -= amount;
-        msg.sender.transfer(amount);
+        msg.sender.transfer(amount).revertOnFailure(); // contains error
+        require(
+            balances[msg.sender] == originalBalance - amount,
+            "Transfer failed"
+        );
     }
 
     function stake() public {
@@ -25,7 +30,7 @@ contract Bank{
         isStaked[msg.sender] = false;
     }
 
-    function lend(address borrower, uint256 amount) public{
+    function lend(address borrower, uint256 amount) public {
         require(isStaked[msg.sender], "Sender must be staked");
         require(balances[msg.sender] >= amount, "Insufficient Balance");
         balances[borrower] += amount;
@@ -37,5 +42,4 @@ contract Bank{
         balances[lender] += amount;
         balances[msg.sender] -= amount;
     }
-
 }
