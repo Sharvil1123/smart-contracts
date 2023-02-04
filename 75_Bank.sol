@@ -32,4 +32,10 @@ contract Bank{
         balances[msg.sender] -= amount;
     }
 
+    function repay(address lender, uint256 amount) public {
+        require(balances[msg.sender] >= amount, "Insufficient Balance");
+        balances[lender] += amount;
+        balances[msg.sender] -= amount;
+    }
+
 }
