@@ -19,4 +19,10 @@ contract Bank{
         require(!isStaked[msg.sender], "Already Staked");
         isStaked[msg.sender] = true;
     }
+
+    function unStake() public {
+        require(isStaked[msg.sender], "Not Staked");
+        isStaked[msg.sender] = false;
+    }
+    
 }
