@@ -24,5 +24,12 @@ contract Bank{
         require(isStaked[msg.sender], "Not Staked");
         isStaked[msg.sender] = false;
     }
-    
+
+    function lend(address borrower, uint256 amount) public{
+        require(isStaked[msg.sender], "Sender must be staked");
+        require(balances[msg.sender] >= amount, "Insufficient Balance");
+        balances[borrower] += amount;
+        balances[msg.sender] -= amount;
+    }
+
 }
